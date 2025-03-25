@@ -81,6 +81,13 @@ body {
 .grid-container > div {
     border: none;
     box-sizing: border-box;
+    transition: box-shadow 0.2s ease;
+}
+
+/* 网格单元格悬停效果 */
+.grid-container > div:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
 }
 
 /* 操作功能栏样式 */
