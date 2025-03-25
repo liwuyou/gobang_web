@@ -4,6 +4,10 @@ const gridContainer = document.querySelector('.grid-container');
 
 // 棋盘状态 (1为黑，-1为白)
 let boardState = Array(19).fill().map(() => Array(19).fill(0));
+const moveHistory = Array(19).fill().map(() => Array(19).fill(null)); // 记录落子顺序
+let moveCount = 0; // 记录当前总步数
+let lastTwoMoves = []; // 记录最后两步的坐标
+
 let currentPlayer = 1; // 1表示黑方(刘启)，-1表示白方(刘贤)
 let gameOver = false;
 
@@ -71,6 +75,14 @@ function handleCellClick(e) {
     
     // 更新棋盘状态
     boardState[row][col] = currentPlayer;
+    
+    // 记录步数
+    moveCount++;
+    moveHistory[row][col] = moveCount; // 在该位置记录当前步数
+    lastTwoMoves.push({row, col});
+    if (lastTwoMoves.length > 2) {
+        lastTwoMoves.shift();
+    }
     
     // 创建棋子元素
     const stone = document.createElement('div');
@@ -166,12 +178,51 @@ function resetGame() {
 
 
 // 初始化
+// 悔棋功能
+function undoMove() {
+    if (lastTwoMoves.length < 2) {
+        alert('步数不足，无法悔棋');
+        return;
+    }
+
+    // 移除最后两步棋子
+    lastTwoMoves.forEach(move => {
+        boardState[move.row][move.col] = 0;
+        moveHistory[move.row][move.col] = null;
+        
+        // 从DOM移除棋子
+        const stones = document.querySelectorAll('.black-stone, .white-stone');
+        const stoneToRemove = Array.from(stones).find(stone => {
+            const left = parseInt(stone.style.left);
+            const top = parseInt(stone.style.top);
+            const cellSize = (canvas.width - 39) / 19;
+            const padding = 19.5;
+            const col = Math.round((left - padding) / cellSize);
+            const row = Math.round((top - padding) / cellSize);
+            return row === move.row && col === move.col;
+        });
+        
+        if (stoneToRemove) {
+            stoneToRemove.remove();
+        }
+    });
+
+    // 更新状态
+    moveCount -= 2;
+    lastTwoMoves = [];
+    currentPlayer = currentPlayer === 1 ? -1 : 1; // 切换回上一步的玩家
+    document.getElementById('player').textContent = `当前棋手: ${currentPlayer === 1 ? '刘启' : '刘贤'}`;
+}
+
 function init() {
     drawBoard();
     createGrid();
     
     // 添加重新开始按钮事件
     document.getElementById('restart').addEventListener('click', resetGame);
+    
+    // 添加悔棋按钮事件
+    document.getElementById('undo').addEventListener('click', undoMove);
 }
 
 init();
