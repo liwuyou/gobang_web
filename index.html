@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线五子棋</title>
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <!-- 左边人物立绘 -->
+        </div>
+        <div class="center-panel">
+            
+            
+            <!-- 功能键区 -->
+            <div class="control">
+                <div id="current-player">当前棋手: 刘启</div>
+
+                <button id="undo">悔棋</button>
+                <button id="surrender">认输</button>
+                <button id="restart">重新开始</button>
+                <button id="over">棋王技</button>
+            </div>
+
+            <!-- 棋盘区 -->
+            <div class="my_zone">
+                <canvas id="go-board" width="780" height="780"></canvas>
+                <div class="click-layer">
+                    <div class="grid-container"></div>
+                </div>
+                <script src="board.js"></script>
+            </div>
+            
+
+            
+        </div>
+        <div class="right-panel">
+            <!-- 右边人物立绘 -->
+        </div>
+    </div>
+</body>
+</html>

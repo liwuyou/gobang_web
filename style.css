@@ -1,0 +1,123 @@
+/* 页面背景 - 使用background.png作为背景图，覆盖整个视口 */
+body {
+    background-image: url('background.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 0;
+    min-height: 100vh;
+}
+
+/* 主容器 - 使用flex布局，最小高度100vh，四周20px外边距 */
+.container {
+    display: flex;
+    min-height: 100vh;
+    margin: 20px;
+}
+
+/* 左侧边栏 - 宽度比例1，使用left.png作为背景图，20px外边距，固定高度400px */
+.left-panel {
+    flex: 1;
+    padding: 10px;
+    margin: 120px auto 20px;
+    height: 600px;
+    background-image: url('left.png');
+    background-size: cover;
+    background-position: center;
+}
+
+/* 右侧边栏 - 宽度比例1，使用right.png作为背景图，20px外边距，固定高度400px */
+.right-panel {
+    flex: 1;
+    padding: 10px;
+    margin: 120px auto 20px;
+    height: 600px;
+    background-image: url('right.png');
+    background-size: cover;
+    background-position: center;
+}
+
+/* 中间面板 - 宽度比例2.5，白色背景，灰色边框，20px内边距，垂直flex布局 */
+.center-panel {
+    flex: 2.5;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 棋盘容器样式 */
+.center-panel .my_zone {
+    width: 780px;
+    height: 780px;
+    background: #c2a657;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* 点击层样式 */
+.click-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    pointer-events: auto;
+}
+
+/* 网格容器样式 */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(19, 1fr);
+    grid-template-rows: repeat(19, 1fr);
+    width: calc(100% - 39px); /* 减去左右边距 */
+    height: calc(100% - 39px); /* 减去上下边距 */
+    margin: 19.5px; /* 棋盘线到边缘的距离 */
+}
+
+/* 网格单元格样式 */
+.grid-container > div {
+    border: none;
+    box-sizing: border-box;
+}
+
+/* 操作功能栏样式 */
+.center-panel .control {
+    width: 780px;
+    margin: 0px auto 10px;
+    padding: 15px;
+    background: #c2a657;
+    border-radius: 2px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* 棋子样式 */
+.black-stone {
+    width: 36px;
+    height: 36px;
+    background-color: #000;
+    border-radius: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+}
+
+.white-stone {
+    width: 36px;
+    height: 36px;
+    background-color: #fff;
+    border: 1px solid #000;
+    border-radius: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+}
+
+/* 当前棋手显示文字样式 */
+.control span {
+    font-size: 18px;
+    font-weight: bold;
+}
