@@ -2,9 +2,14 @@ const canvas = document.getElementById('go-board');
 const ctx = canvas.getContext('2d');
 const gridContainer = document.querySelector('.grid-container');
 
+// 棋盘状态 (1为黑，-1为白)
+let boardState = Array(19).fill().map(() => Array(19).fill(0));
+let currentPlayer = 1; // 1表示黑方(刘启)，-1表示白方(刘贤)
+let gameOver = false;
+
 // 创建19x19网格并添加点击事件
 function createGrid() {
-    const cellSize = (canvas.width - 39) / 19; // 每个格子实际大小(减去边距)
+    const cellSize = (canvas.width - 39) / 19;
     
     for (let i = 0; i < 19; i++) {
         for (let j = 0; j < 19; j++) {
@@ -19,20 +24,57 @@ function createGrid() {
     }
 }
 
-// 处理格子点击
-let currentPlayer = 'black'; // 当前玩家，black或white
+// 检查五子连珠
+function checkWin(row, col) {
+    const directions = [
+        [0, 1],  // 水平
+        [1, 0],  // 垂直
+        [1, 1],  // 对角线
+        [1, -1]  // 反对角线
+    ];
 
+    for (const [dx, dy] of directions) {
+        let count = 1;
+        
+        // 正向检查
+        for (let i = 1; i < 5; i++) {
+            const r = row + i * dx;
+            const c = col + i * dy;
+            if (r < 0 || r >= 19 || c < 0 || c >= 19 || boardState[r][c] !== currentPlayer) break;
+            count++;
+        }
+        
+        // 反向检查
+        for (let i = 1; i < 5; i++) {
+            const r = row - i * dx;
+            const c = col - i * dy;
+            if (r < 0 || r >= 19 || c < 0 || c >= 19 || boardState[r][c] !== currentPlayer) break;
+            count++;
+        }
+        
+        if (count >= 5) return true;
+    }
+    
+    return false;
+}
+
+// 处理格子点击
 function handleCellClick(e) {
+    if (gameOver) return;
+    
     const cell = e.target;
     const row = parseInt(cell.dataset.row);
     const col = parseInt(cell.dataset.col);
     
     // 如果该位置已有棋子则返回
-    if (cell.dataset.hasStone) return;
+    if (boardState[row][col]) return;
+    
+    // 更新棋盘状态
+    boardState[row][col] = currentPlayer;
     
     // 创建棋子元素
     const stone = document.createElement('div');
-    stone.className = currentPlayer === 'black' ? 'black-stone' : 'white-stone';
+    stone.className = currentPlayer === 1 ? 'black-stone' : 'white-stone';
     
     // 计算棋子位置
     const cellSize = (canvas.width - 39) / 19;
@@ -47,26 +89,28 @@ function handleCellClick(e) {
     // 添加到点击层
     document.querySelector('.click-layer').appendChild(stone);
     
-    // 标记该位置已有棋子
-    cell.dataset.hasStone = 'true';
+    // 检查胜负
+    if (checkWin(row, col)) {
+        gameOver = true;
+        const winner = currentPlayer === 1 ? '刘启' : '刘贤';
+        const statusEl = document.querySelector('.game-status');
+        statusEl.textContent = `${winner}获胜!`;
+        
+        return;
+    }
     
     // 切换玩家
-    currentPlayer = currentPlayer === 'black' ? 'white' : 'black';
+    currentPlayer = currentPlayer === 1 ? -1 : 1;
     
     // 更新当前玩家显示
-    const playerDisplay = document.querySelector('.player-display');
-    if (playerDisplay) {
-        playerDisplay.textContent = `当前: ${currentPlayer === 'black' ? '黑方' : '白方'}`;
-    }
+    document.getElementById('player').textContent = `当前棋手: ${currentPlayer === 1 ? '刘启' : '刘贤'}`;
 }
 
 // 绘制棋盘
 function drawBoard() {
-    // 绘制棋盘背景
     ctx.fillStyle = '#c2a657';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
-    // 绘制19x19网格线
     ctx.strokeStyle = '#000';
     ctx.lineWidth = 1;
     
@@ -91,7 +135,7 @@ function drawBoard() {
     
     // 绘制星位
     ctx.fillStyle = '#000';
-    const starPoints = [3, 9, 15]; // 星位坐标
+    const starPoints = [3, 9, 15];
     for (let x of starPoints) {
         for (let y of starPoints) {
             ctx.beginPath();
@@ -105,10 +149,29 @@ function drawBoard() {
     }
 }
 
+// 重置游戏
+function resetGame() {
+    // 移除所有棋子
+    document.querySelectorAll('.black-stone, .white-stone').forEach(stone => stone.remove());
+    
+    // 重置游戏状态
+    boardState = Array(19).fill().map(() => Array(19).fill(0));
+    currentPlayer = 1;
+    gameOver = false;
+    
+    // 更新玩家显示
+    document.getElementById('player').textContent = `当前棋手: 刘启`;
+}
+
+
+
 // 初始化
 function init() {
-    createGrid();
     drawBoard();
+    createGrid();
+    
+    // 添加重新开始按钮事件
+    document.getElementById('restart').addEventListener('click', resetGame);
 }
 
 init();
