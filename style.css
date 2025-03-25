@@ -67,6 +67,20 @@ body {
     pointer-events: auto;
 }
 
+/* 棋子定位 */
+.black-stone, .white-stone {
+    position: absolute;
+    pointer-events: none;
+}
+
+/* 当前玩家显示 */
+.player-display {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-left: 10px;
+}
+
 /* 网格容器样式 */
 .grid-container {
     display: grid;
@@ -103,24 +117,23 @@ body {
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-/* 棋子样式 */
+/* 棋子样式 - 更加拟真 */
 .black-stone {
     width: 36px;
     height: 36px;
-    background-color: #000;
+    background: radial-gradient(circle at 30% 30%, #444, #000);
     border-radius: 50%;
-    position: absolute;
-    transform: translate(-50%, -50%);
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    border: 1px solid #222;
 }
 
 .white-stone {
     width: 36px;
     height: 36px;
-    background-color: #fff;
-    border: 1px solid #000;
+    background: radial-gradient(circle at 30% 30%, #fff, #ddd);
     border-radius: 50%;
-    position: absolute;
-    transform: translate(-50%, -50%);
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    border: 1px solid #999;
 }
 
 /* 当前棋手显示文字样式 */
