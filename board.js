@@ -114,8 +114,10 @@ function handleCellClick(e) {
     // 切换玩家
     currentPlayer = currentPlayer === 1 ? -1 : 1;
     
-    // 更新当前玩家显示
+    // 更新当前玩家显示和照片高亮
     document.getElementById('player').textContent = `当前棋手: ${currentPlayer === 1 ? '刘启' : '刘贤'}`;
+    document.getElementById('liu-qi-photo').classList.toggle('active', currentPlayer === 1);
+    document.getElementById('liu-xian-photo').classList.toggle('active', currentPlayer === -1);
 }
 
 // 绘制棋盘
@@ -171,8 +173,10 @@ function resetGame() {
     currentPlayer = 1;
     gameOver = false;
     
-    // 更新玩家显示
+    // 更新玩家显示和照片高亮
     document.getElementById('player').textContent = `当前棋手: 刘启`;
+    document.getElementById('liu-qi-photo').classList.add('active');
+    document.getElementById('liu-xian-photo').classList.remove('active');
 }
 
 

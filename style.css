@@ -1,6 +1,6 @@
 /* 页面背景 - 使用background.png作为背景图，覆盖整个视口 */
 body {
-    background-image: url('background.png');
+    background-image: url('images/background.png');
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -15,26 +15,40 @@ body {
     margin: 20px;
 }
 
-/* 左侧边栏 - 宽度比例1，使用left.png作为背景图，20px外边距，固定高度400px */
+/* 左侧边栏 - 宽度比例1，20px外边距，固定高度600px */
 .left-panel {
     flex: 1;
     padding: 10px;
     margin: 120px auto 20px;
     height: 600px;
-    background-image: url('left.png');
-    background-size: cover;
-    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* 右侧边栏 - 宽度比例1，使用right.png作为背景图，20px外边距，固定高度400px */
+/* 右侧边栏 - 宽度比例1，20px外边距，固定高度600px */
 .right-panel {
     flex: 1;
     padding: 10px;
     margin: 120px auto 20px;
     height: 600px;
-    background-image: url('right.jpg');
-    background-size: cover;
-    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 玩家照片基础样式 */
+.player-photo {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+    transition: box-shadow 0.3s ease;
+}
+
+/* 当前玩家高亮效果 */
+.player-photo.active {
+    box-shadow: 0 0 20px 5px gold;
 }
 
 /* 中间面板 - 宽度比例2.5，白色背景，灰色边框，20px内边距，垂直flex布局 */
@@ -180,5 +194,3 @@ body {
 .control button:hover {
     background: #6d4f2a; /* 悬停时加深颜色 */
 }
-
-
